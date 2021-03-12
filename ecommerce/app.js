@@ -1,6 +1,10 @@
 const express = require('express')
 require('dotenv').config()
 const mongoose = require('mongoose')
+const morgan = require('morgan')
+const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
+const expressvalidator = require('express-validator')
 const userRoutes = require('./routes/user')
 
 // app
@@ -16,6 +20,10 @@ mongoose.connect(process.env.DATABASE, {
 })
 
 // routes
+app.use(morgan('dev'))
+app.use(bodyParser.json())
+app.use(expressvalidator())
+app.use(cookieParser())
 app.use('/api' ,userRoutes)
 
 const port = process.env.PORT || 8000
