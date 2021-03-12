@@ -5,6 +5,7 @@ const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const expressvalidator = require('express-validator')
+const authRoutes = require('./routes/auth')
 const userRoutes = require('./routes/user')
 
 // app
@@ -25,6 +26,7 @@ app.use(bodyParser.json())
 app.use(expressvalidator())
 app.use(cookieParser())
 app.use('/api' ,userRoutes)
+app.use('/api' ,authRoutes)
 
 const port = process.env.PORT || 8000
 app.listen(port, () => {
