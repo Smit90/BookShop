@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Layout from './Layout'
 import { getProducts } from './ApiCore'
 import Card from './Card'
-
+import Search from './Search'
 
 
 const Home = () => {
@@ -38,15 +38,16 @@ const Home = () => {
 
     return (
         <Layout title="Home Page" description="MERN Ecommerce Application" className="container-fluid">
+            <Search />
             <h2 className="mb-4">New Arrival</h2>
             <div className="row">
-                {productByArrival.map((product, i) => (
+                {productByArrival?.map((product, i) => (
                     <Card key={i} product={product} />
                 ))}
             </div>
             <h2 className="mb-4">Best Seller</h2>
             <div className="row">
-                {productBySell.map((product, i) => (
+                {productBySell?.map((product, i) => (
                     <Card key={i} product={product} />
                 ))}
             </div>
