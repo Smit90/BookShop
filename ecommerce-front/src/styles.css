@@ -55,6 +55,20 @@
     margin-top: 10px;
   }
 }
+
+@media only screen and (max-width: 767px) {
+  h2 {
+    font-size: 1.5rem;
+  }
+  .card-btn-1 {
+    padding: 0.3rem 5px;
+  }
+}
+@media only screen and (max-width: 424px) {
+  .lead {
+    font-size: 1rem;
+  }
+}
 /* jumbotron animation */
 
 .jumbotron {

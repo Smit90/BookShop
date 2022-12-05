@@ -39,6 +39,8 @@ const Search = () => {
                         setData({ ...data, results: response, searched: true })
                     }
                 })
+        } else {
+            setData({ ...data, results: [], searched: false })
         }
     }
 
@@ -68,7 +70,9 @@ const Search = () => {
                 </h2>
                 <div className="row">
                     {results.map((product, i) => (
-                        <Card product={product} key={i} />
+                        <div key={i} className="col-sm-6 col-lg-4 col-xl-3 mb-3">
+                            <Card product={product} key={i} />
+                        </div>
                     ))}
                 </div>
             </div>
@@ -78,7 +82,7 @@ const Search = () => {
     const searchForm = () => (
         <form onSubmit={searchSubmit}>
             <span className="input-group-text">
-                <div className="input-group input-group-lg">
+                <div className="input-group ">
                     <div className="input-group-prepend">
                         <select className="btn mr-2" name="category" onChange={handleChange('category')}>
                             <option value="All">Pick Category</option>

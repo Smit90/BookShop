@@ -85,7 +85,7 @@ const AddProduct = () => {
         <form className="mb-3" onSubmit={clickSubmit}>
             <h4>Post Photo</h4>
             <div className="form-group">
-                <label className="btn btn-secondary">
+                <label className="btn btn-secondary btn-sm">
                     <input onChange={handleChange('photo')} type="file" name="photo" accept="image/*"></input>
                 </label>
             </div>
@@ -126,7 +126,7 @@ const AddProduct = () => {
     return (
         <Layout title="Add a new Product" description={`G'day ${user.name}!, ready to add new product?`} className="container" >
             <div className="row">
-                <div className="col-8 offset-md-2">
+                <div className="col-sm-12 col-md-8 offset-md-2">
                     {showLoading()}
                     {showSuccess()}
                     {showError()}

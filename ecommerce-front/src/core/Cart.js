@@ -18,20 +18,36 @@ const Cart = () => {
     const showItems = items => {
         return (
             <div>
-                <h2>Your cart has {`${items.length}`} items</h2>
+                <div className="">
+
+                    <h2>Your cart has {`${items.length}`} items</h2>
+                    <button onClick={() => {
+                        items.map((product, index) => {
+                            removeItem(product._id)
+                        })
+                        setItems(getCart())
+                    }} className="btn btn-outline-danger mt-2 mb-2 card-btn-1  ">
+                        Clear Cart
+                    </button>
+                </div>
                 <hr />
-                {items.map((product, i) => (
-                    <Card
-                        key={i}
-                        product={product}
-                        showAddToCartButton={false}
-                        cartUpdate={true}
-                        showRemoveProductButton={true}
-                        setRun={setRun}
-                        run={run}
-                    // changeCartSize={changeCartSize}
-                    />
-                ))}
+                <div className="row">
+                    {items.map((product, i) => (
+                        <div key={i} className="col-sm-6 col-lg-6 col-xl-4 mb-3">
+                            <Card
+                                key={i}
+                                product={product}
+                                showAddToCartButton={false}
+                                cartUpdate={true}
+                                showRemoveProductButton={true}
+                                setRun={setRun}
+                                run={run}
+                                showAddToWishlistButton={false}
+                            // changeCartSize={changeCartSize}
+                            />
+                        </div>
+                    ))}
+                </div>
             </div>
         );
     };
@@ -46,12 +62,19 @@ const Cart = () => {
     return (
         <Layout title="Shopping Cart" description="Checkout now!" className="container-fluid">
             <div className="row">
-                <div className="col-6">{items.length > 0 ? showItems(items) : noItemsMessage()}</div>
-                <div className="col-6">
-                    <h2 className="mb-4">Your Cart Summary</h2>
-                    <hr />
-                    <Checkout products={items} />
+                <div className="col-sm-9 col-lg-8">
+                    {items.length > 0 ? showItems(items) : noItemsMessage()}
                 </div>
+                {
+                    items.length > 0 &&
+                    <div className="col-sm-3 col-lg-4">
+                        <div>
+                            <h2>Your Cart Summary</h2>
+                            <hr />
+                        </div>
+                        <Checkout products={items} />
+                    </div>
+                }
             </div>
         </Layout>
     );

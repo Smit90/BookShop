@@ -95,7 +95,7 @@ const Shop = () => {
     return (
         <Layout title="Shop Page" description="Search and find books by your choice" className="container-fluid">
             <div className="row">
-                <div className="col-4">
+                <div className="col-xs-12 col-md-3">
                     <h4>Filter by Categories</h4>
                     <ul>
                         <Checkbox categories={categories} handleFilters={filters => handleFilters(filters, 'category')} />
@@ -105,11 +105,11 @@ const Shop = () => {
                         <RadioBox prices={prices} handleFilters={filters => handleFilters(filters, 'price')} />
                     </div>
                 </div>
-                <div className="col-8">
+                <div className="col-xs-12 col-md-9">
                     <h2 className="mb-4">Products</h2>
                     <div className="row">
                         {filteredResults?.map((product, i) => (
-                            <div key={i} className="col-4 mb-3">
+                            <div key={i} className="col-sm-6 col-lg-4 col-xl-3 mb-3">
                                 <Card product={product} />
                             </div>
                         ))}
