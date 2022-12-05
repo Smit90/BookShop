@@ -4,12 +4,13 @@ import { getProducts } from './ApiCore'
 import Card from './Card'
 import { isAuthenticated } from '../auth'
 import { Link } from 'react-router-dom'
+import { EventEmitter } from '../Utils/events'
 
 
 const Checkout = ({ products }) => {
     const getTotal = () => {
         return products.reduce((currentValue, nextValue) => {
-            return currentValue + nextValue.count + nextValue.price
+            return currentValue + nextValue.count * nextValue.price
         }, 0)
     }
 

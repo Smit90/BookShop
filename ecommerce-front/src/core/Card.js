@@ -1,22 +1,26 @@
 import React, { useState } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect, useHistory } from 'react-router-dom';
 import ShowImage from './ShowImage';
 import moment from 'moment';
-import { addItem, updateItem, removeItem } from './cartHelpers';
-
+import { addItem, updateItem, removeItem, addItemtoWishList } from './cartHelpers';
+import { isAuthenticated } from '../auth';
+import { EventEmitter } from '../Utils/events'
 
 const Card = ({
     product,
     showViewProductButton = true,
     showAddToCartButton = true,
+    showAddToWishlistButton = true,
     cartUpdate = false,
     showRemoveProductButton = false,
     setRun = f => f,
-    run = undefined
+    run = undefined,
+    isWishListItem = false
     // changeCartSize
 }) => {
     const [redirect, setRedirect] = useState(false);
     const [count, setCount] = useState(product.count);
+    const history = useHistory()
 
     const showViewButton = showViewProductButton => {
         return (
@@ -30,7 +34,23 @@ const Card = ({
 
     const addToCart = () => {
         // console.log('added');
-        addItem(product, setRedirect(true));
+        let redirect = true
+        if (isWishListItem) {
+            removeItem(product._id, product.wishlist)
+            EventEmitter.dispatch('WISHLIST_ITEM_ADDED_TO_CART', product)
+            delete product.wishlist
+            redirect = false
+        }
+        addItem(product, setRedirect(redirect));
+    };
+
+    const addToWisList = () => {
+        console.log('added');
+        if (isAuthenticated()) {
+            addItemtoWishList(product);
+        } else {
+            history.push('/signin')
+        }
     };
 
     const shouldRedirect = redirect => {
@@ -42,8 +62,17 @@ const Card = ({
     const showAddToCartBtn = showAddToCartButton => {
         return (
             showAddToCartButton && (
-                <button onClick={addToCart} className="btn btn-outline-warning mt-2 mb-2 card-btn-1  ">
+                <button onClick={addToCart} className="btn btn-outline-warning mr-2 mt-2 mb-2 card-btn-1  ">
                     Add to cart
+                </button>
+            )
+        );
+    };
+    const showAddToWishlistBtn = showAddToWishlistButton => {
+        return (
+            showAddToWishlistButton && (
+                <button onClick={addToWisList} className="btn btn-outline-secondary mt-2 mb-2 card-btn-1  ">
+                    Add to wishlist
                 </button>
             )
         );
@@ -62,6 +91,7 @@ const Card = ({
         setCount(event.target.value < 1 ? 1 : event.target.value);
         if (event.target.value >= 1) {
             updateItem(productId, event.target.value);
+            EventEmitter.dispatch('QUANTITY_CHANGED', product)
         }
     };
 
@@ -85,7 +115,8 @@ const Card = ({
             showRemoveProductButton && (
                 <button
                     onClick={() => {
-                        removeItem(product._id);
+                        removeItem(product._id, isWishListItem);
+                        EventEmitter.dispatch('ITEM_REMOVED', product)
                         // setRun(!run); // run useEffect in parent Cart
                     }}
                     className="btn btn-outline-danger mt-2 mb-2"
@@ -112,6 +143,7 @@ const Card = ({
                 {showViewButton(showViewProductButton)}
 
                 {showAddToCartBtn(showAddToCartButton)}
+                {showAddToWishlistBtn(showAddToWishlistButton)}
 
                 {showRemoveButton(showRemoveProductButton)}
 

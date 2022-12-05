@@ -5,6 +5,7 @@ import Home from './core/Home'
 import PrivateRoute from './auth/PrivateRoutes'
 import AdminRoute from './auth/AdminRoute'
 import Dashboard from './user/UserDashboard'
+import WishList from './user/WishList'
 import AdminDashboard from './user/AdminDashboard'
 import AddCategory from './admin/AddCategory'
 import AddProduct from './admin/AddProduct'
@@ -22,6 +23,7 @@ const Routes = () => {
                 <Route path='/signin' exact component={Signin} />
                 <Route path='/signup' exact component={Signup} />
                 <PrivateRoute path='/user/dashboard' exact component={Dashboard} />
+                <PrivateRoute path='/user/wishlist' exact component={WishList} />
                 <AdminRoute path='/admin/dashboard' exact component={AdminDashboard} />
                 <AdminRoute path='/create/category' exact component={AddCategory} />
                 <AdminRoute path='/create/product' exact component={AddProduct} />

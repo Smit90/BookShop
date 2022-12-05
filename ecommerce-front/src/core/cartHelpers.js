@@ -27,6 +27,26 @@ export const addItem = (item, next) => {
     // next()
 }
 
+export const addItemtoWishList = (item, next) => {
+    let cart = []
+    if (typeof window !== 'undefined') {
+        if (localStorage.getItem('wishlist')) {
+            cart = JSON.parse(localStorage.getItem('wishlist'))
+        }
+        cart.push({
+            ...item,
+            count: 1,
+            wishlist: true
+        })
+        cart = Array.from(new Set(cart.map((p) => (p._id)))).map(id => {
+            return cart.find(p => p._id === id)
+        })
+        localStorage.setItem('wishlist', JSON.stringify(cart))
+
+    }
+    // next()
+}
+
 export const itemTotal = () => {
     if (typeof window !== 'undefined') {
         if (localStorage.getItem('cart')) {
@@ -43,12 +63,20 @@ export const getCart = () => {
     }
     return []
 }
+export const getWishListItems = () => {
+    if (typeof window !== 'undefined') {
+        if (localStorage.getItem('wishlist')) {
+            return JSON.parse(localStorage.getItem('wishlist'))
+        }
+    }
+    return []
+}
 
 export const updateItem = (productId, count) => {
     let cart = []
     if (typeof window !== 'undefined') {
         if (localStorage.getItem('cart')) {
-            return JSON.parse(localStorage.getItem('cart'))
+            cart = JSON.parse(localStorage.getItem('cart'))
         }
         cart.map((product, i) => {
             if (product._id === productId) {
@@ -59,18 +87,19 @@ export const updateItem = (productId, count) => {
     }
 }
 
-export const removeItem = (productId) => {
+export const removeItem = (productId, isWishListItem) => {
     let cart = []
+    const cartName = isWishListItem ? 'wishlist' : 'cart'
     if (typeof window !== 'undefined') {
-        if (localStorage.getItem('cart')) {
-            cart = JSON.parse(localStorage.getItem('cart'))
+        if (localStorage.getItem(cartName)) {
+            cart = JSON.parse(localStorage.getItem(cartName))
         }
         cart.map((product, i) => {
             if (product._id === productId) {
                 cart.splice(i, 1)
             }
         })
-        localStorage.setItem('cart', JSON.stringify(cart))
+        localStorage.setItem(cartName, JSON.stringify(cart))
     }
     return cart
 }
