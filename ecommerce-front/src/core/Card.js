@@ -3,6 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import ShowImage from './ShowImage';
 import moment from 'moment';
 import { addItem, updateItem, removeItem } from './cartHelpers';
+import { EventEmitter } from '../utils/events';
 
 
 const Card = ({
@@ -62,6 +63,7 @@ const Card = ({
         setCount(event.target.value < 1 ? 1 : event.target.value);
         if (event.target.value >= 1) {
             updateItem(productId, event.target.value);
+            EventEmitter.dispatch('QUANTITY_CHANGED', product)
         }
     };
 
@@ -86,9 +88,10 @@ const Card = ({
                 <button
                     onClick={() => {
                         removeItem(product._id);
+                        EventEmitter.dispatch('ITEM_REMOVED', product)
                         // setRun(!run); // run useEffect in parent Cart
                     }}
-                    className="btn btn-outline-danger mt-2 mb-2"
+                    className="btn btn-outline-danger mt-2 mb-2 card-btn-1"
                 >
                     Remove Product
                 </button>

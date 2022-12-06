@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { getCart, removeItem } from './cartHelpers';
 import Card from './Card';
 import Checkout from './Checkout';
+import { EventEmitter } from "../utils/events";
 
 const Cart = () => {
     const [items, setItems] = useState([]);
@@ -14,6 +15,9 @@ const Cart = () => {
         console.log('MAX DEPTH ...');
         setItems(getCart());
     }, []);
+
+    EventEmitter.subscribe('ITEM_REMOVED', (e) => setItems(getCart()))
+    EventEmitter.subscribe('QUANTITY_CHANGED', () => setItems(getCart()))
 
     const showItems = items => {
         return (
