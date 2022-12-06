@@ -7,7 +7,7 @@ import { createProduct, getCategories } from './ApiAdmin'
 const AddProduct = () => {
 
     const { user, token } = isAuthenticated()
-
+    const [picLoading, setPicLoading] = useState(false);
     const [values, setValues] = useState({
         name: '',
         description: '',
@@ -41,11 +41,35 @@ const AddProduct = () => {
 
     const { name, description, price, categories, category, shipping, quantity, loading, error, createdProduct, redirectToProfile, formData } = values
 
-    const handleChange = name => event => {
-        const value = name === 'photo' ? event.target.files[0] : event.target.value
+    const handleChange = name => async event => {
+        const value = name === 'photo' ? await uploadToCloudinary(event.target.files[0]) : event.target.value
         formData.set(name, value)
         setValues({ ...values, [name]: value })
     }
+
+    const uploadToCloudinary = async (pic) => {
+        try {
+            setPicLoading(true)
+            const data = new FormData();
+            data.append("file", pic);
+            data.append("upload_preset", process.env.REACT_APP_UPLOAD_PRESET);
+            data.append("cloud_name", process.env.REACT_APP_CLOUD_NAME);
+            let response = await fetch(
+                `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/image/upload`,
+                {
+                    method: "post",
+                    body: data,
+                }
+            )
+            response = await response.json()
+            setPicLoading(false)
+            return response.url.toString()
+        } catch (error) {
+            console.log("error", error)
+            setPicLoading(false);
+        }
+    }
+
 
     const clickSubmit = event => {
         event.preventDefault()
@@ -77,6 +101,14 @@ const AddProduct = () => {
         loading && (
             <div className="alert alert-success">
                 <h2>Loading...</h2>
+            </div>
+        )
+    )
+
+    const showUploadLoading = () => (
+        picLoading && (
+            <div className="alert alert-success">
+                <h2>Uploading...</h2>
             </div>
         )
     )
@@ -127,6 +159,7 @@ const AddProduct = () => {
         <Layout title="Add a new Product" description={`G'day ${user.name}!, ready to add new product?`} className="container" >
             <div className="row">
                 <div className="col-sm-12 col-md-8 offset-md-2">
+                    {showUploadLoading()}
                     {showLoading()}
                     {showSuccess()}
                     {showError()}
