@@ -30,11 +30,11 @@ const Menu = ({ history }) => (
                     <li className="nav-item">
                         <Link className="nav-link" style={isActive(history, '/cart')} to='/cart'>Cart <sup><small className="cart-badge">{itemTotal()}</small></sup></Link>
                     </li>
-                    {isAuthenticated() && isAuthenticated().user.role === 0 && (
+                    {/* {isAuthenticated() && isAuthenticated().user.role === 0 && (
                         <li className="nav-item">
                             <Link className="nav-link" style={isActive(history, '/user/wishlist')} to='/user/wishlist'>Wishlist</Link>
                         </li>
-                    )}
+                    )} */}
                     {isAuthenticated() && isAuthenticated().user.role === 0 && (
                         <li className="nav-item">
                             <Link className="nav-link" style={isActive(history, '/user/dashboard')} to='/user/dashboard'>Dashboard</Link>
